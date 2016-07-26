@@ -1,52 +1,30 @@
-#include <QtGui>
+#include "mainwindow.h"
 #include <QApplication>
-#include <QAxObject>
 #include <QAxWidget>
-#include <qaxselect.h>
-int main(int argc, char **argv)
+#include <QAxObject>
+
+int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QAxSelect select;
-    select.show();
-    QAxWidget excel("Excel.Application");
-    excel.setProperty("Visible", true);
-    QAxObject * workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Open (const QString&)", QString("Personal_Plan_Shi_JW_201607.xlsx"));
-    QAxObject * workbook = excel.querySubObject("ActiveWorkBook");
-    QAxObject * worksheets = workbook->querySubObject("WorkSheets");
-    int intCount = worksheets->property("Count").toInt();
-    for (int i = 1; i <= intCount; i++)
-    {
-        int intVal;
-        QAxObject * worksheet = workbook->querySubObject("Worksheets(int)", i);
-        qDebug() << i << worksheet->property("Name").toString();
-        QAxObject * range = worksheet->querySubObject("Cells(1,1)");
-        intVal = range->property("Value").toInt();
-        range->setProperty("Value", QVariant(intVal+1));
-        QAxObject * range2 = worksheet->querySubObject("Range(C1)");
-        intVal = range2->property("Value").toInt();
-        range2->setProperty("Value", QVariant(intVal+1));
-    }
-    QAxObject * worksheet = workbook->querySubObject("Worksheets(int)", 1);
-    QAxObject * usedrange = worksheet->querySubObject("UsedRange");
-    QAxObject * rows = usedrange->querySubObject("Rows");
-    QAxObject * columns = usedrange->querySubObject("Columns");
-    int intRowStart = usedrange->property("Row").toInt();
-    int intColStart = usedrange->property("Column").toInt();
-    int intCols = columns->property("Count").toInt();
-    int intRows = rows->property("Count").toInt();
-    for (int i = intRowStart; i < intRowStart + intRows; i++)
-    {
-        for (int j = intColStart; j <= intColStart + intCols; j++)
-        {
-            QAxObject * range = worksheet->querySubObject("Cells(int,int)", i, j );
-            qDebug() << i << j << range->property("Value");
-        }
-    }
-    excel.setProperty("DisplayAlerts", 0);
-    workbook->dynamicCall("SaveAs (const QString&)", QString("c:/xlsbyqt.xls"));
-    excel.setProperty("DisplayAlerts", 1);
-    workbook->dynamicCall("Close (Boolean)", false);
-    excel.dynamicCall("Quit (void)");
+    MainWindow w;
+    w.show();
+
+    QAxObject *obj = new QAxObject("Excel.Application");
+    obj->setProperty("Visible", true);
+    obj->setProperty("Caption", "Hello world");
+    QAxObject *workBooks = obj->querySubObject("Workbooks");
+    //打开已存的excel文件
+    QAxObject *workBook =
+         workBooks->querySubObject("Open(QString)",
+         "C:\\Users\\lenovo\\Documents\\m_Internship\\Personal_Plan_Shi_JW_201607.xlsx");
+
+    workBooks->dynamicCall("Add");
+    //QAxObject *workBook = workBooks->querySubObject("Item(const int)", 1);
+    QAxObject *sheets = workBook->querySubObject("Sheets");
+    QAxObject *sheet = sheets->querySubObject("Item(int)", 1);
+    QAxObject *range = sheet->querySubObject("Range(const QVariant&)", QVariant(QString("A1:A1")));
+    range->dynamicCall("Clear()");
+    range->dynamicCall("SetValue(const QVariant&)", QVariant(5));
+    obj->dynamicCall("SetScreenUpdating(bool)", true);
     return a.exec();
 }
