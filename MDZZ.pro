@@ -15,10 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    Entrance.cpp
+    Entrance.cpp \
+    ExcelFile.cpp
 
 HEADERS  += mainwindow.h \
-    Entrance.h
+    Entrance.h \
+    ExcelFile.h
 
 FORMS    += mainwindow.ui \
     entrance.ui
