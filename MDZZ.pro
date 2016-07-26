@@ -13,8 +13,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MDZZ
 TEMPLATE = app
 
-include(3rdparty/qtxlsx/src/xlsx/qtxlsx.pri)
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     Entrance.cpp
