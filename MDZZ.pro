@@ -16,11 +16,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     Entrance.cpp \
-    ExcelFile.cpp
+    ExcelFile.cpp \
+    ExcelHandler.cpp
 
 HEADERS  += mainwindow.h \
     Entrance.h \
-    ExcelFile.h
+    ExcelFile.h \
+    ExcelHandler.h
 
 FORMS    += mainwindow.ui \
     entrance.ui
