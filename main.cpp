@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
     QAxObject * workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Open (const QString&)", QString("c:/test.xls"));
+    workbooks->dynamicCall("Open (const QString&)", QString("Personal_Plan_Shi_JW_201607.xlsx"));
     QAxObject * workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject * worksheets = workbook->querySubObject("WorkSheets");
     int intCount = worksheets->property("Count").toInt();
