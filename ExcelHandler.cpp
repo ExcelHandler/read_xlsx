@@ -1,8 +1,9 @@
 #include "ExcelHandler.h"
+#include "ExcelFile.h"
 #include <QProgressDialog>
 #include <QDebug>
 
-ExcelHandler::ExcelHandler(MainWindow *root, QObject *parent) : _root(root), QObject(parent)
+ExcelHandler::ExcelHandler(MainWindow *root, QObject *parent) : _root(root), QObject(parent), isWorking(true)
 {
 
 }
@@ -10,15 +11,21 @@ ExcelHandler::ExcelHandler(MainWindow *root, QObject *parent) : _root(root), QOb
 
 void ExcelHandler::ExcelHandlerSlot(const QStringList &selected)
 {
+    isWorking = true;
     int sum = selected.length();
-    QProgressDialog progress(tr("Importing files..."), tr("Abort Import"),
-                             0, sum);
     for (int i = 0; i < sum; i++)
     {
-        progress.setValue(i);
+
         qDebug() << selected[i] << endl;
 
-        if (progress.wasCanceled())
+        if (!isWorking)
             break;
+        emit update(i + 1);
     }
+}
+
+void ExcelHandler::readFromOneExcel(const QString& filePath)
+{
+    ExcelFile file(filePath);
+
 }

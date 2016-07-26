@@ -13,13 +13,20 @@ public:
 
 signals:
     void ExcelHandlerSignal();
+    void update(int step);
 
 public slots:
     void ExcelHandlerSlot(const QStringList&);
 
+private slots:
+    void stopWorking() { isWorking = false; }
+
 
 private:
+    void readFromOneExcel(const QString& filePath);
+
     MainWindow* _root;
+    bool isWorking;
 };
 
 #endif // EXCELHANDLER_H

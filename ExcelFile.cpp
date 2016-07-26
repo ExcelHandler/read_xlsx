@@ -25,3 +25,10 @@ QVariant ExcelFile::getProperty(const QString &index)
     QAxObject *range = sheet -> querySubObject("Range(const QVariant&)", QVariant(cellRange));
     return range -> property("Value");
 }
+
+QVariant ExcelFile::getProperty(int row, int col)
+{
+    QChar colIndex = (QChar)('A' + col - 1);
+    QString index = colIndex + QString::number(row);
+    return getProperty(index);
+}

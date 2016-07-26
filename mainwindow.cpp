@@ -8,10 +8,10 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), handler(this)
+    ui(new Ui::MainWindow), handler(this), progress(NULL)
 {
     ui->setupUi(this);
-    connect(this, SIGNAL(selectFinished(const QStringList&)), &handler, SLOT(ExcelHandlerSlot(const QStringList&)), Qt::QueuedConnection);
+    initConnect();
     handler.moveToThread(&importThread);
     importThread.start();
 }
@@ -19,6 +19,19 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initConnect()
+{
+    connect(this, SIGNAL(selectFinished(const QStringList&)), &handler, SLOT(ExcelHandlerSlot(const QStringList&)), Qt::QueuedConnection);
+    connect(&handler, SIGNAL(update(int)), this, SLOT(updateProgressBar(int)));
+    connect(this, SIGNAL(stopExcelHandler()), &handler, SLOT(stopWorking()));
+}
+
+void MainWindow::updateProgressBar(int step)
+{
+    progress -> setValue(step);
+    qDebug() << "Update progress bar " << step;
 }
 
 void MainWindow::on_actionImport_triggered()
@@ -33,6 +46,10 @@ void MainWindow::on_actionImport_triggered()
     {
         QStringList selected = fileDialog -> selectedFiles();
         emit selectFinished(selected);
+        int sum = selected.length();
+        progress = new QProgressDialog(tr("Importing files..."), tr("Abort Import"),
+                                 0, sum, this);
+        progress -> show();
 
         for (auto i = selected.begin(); i != selected.end(); ++i)
             qDebug() << *i << endl;

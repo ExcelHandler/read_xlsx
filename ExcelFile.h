@@ -15,6 +15,7 @@ public:
 
     //获得某一单元格的属性
     QVariant getProperty(const QString& index);
+    QVariant getProperty(int row, int col);
 
 private:
     QAxObject* excel;
