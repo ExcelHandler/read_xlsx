@@ -3,12 +3,13 @@
 
 #include <QMainWindow>
 #include <QProgressDialog>
+#include <QThread>
+#include "ExcelHandler.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class ExcelHandler;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,12 +27,18 @@ signals:
 private slots:
     void on_actionImport_triggered();
 
+public slots:
+    void updateProgressBar(int step);
+
+
 private:
     void initConnect();
 
 private:
     Ui::MainWindow *ui;
-    ExcelHandler* handler;
+    ExcelHandler handler;
+    QThread importThread;
+    QProgressDialog* progress;
 };
 
 #endif // MAINWINDOW_H

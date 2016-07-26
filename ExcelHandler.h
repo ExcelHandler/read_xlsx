@@ -1,27 +1,32 @@
 #ifndef EXCELHANDLER_H
 #define EXCELHANDLER_H
 
-#include <QWidget>
+#include <QObject>
 
-namespace Ui {
-class ExcelHandler;
-}
+class MainWindow;
 
-class ExcelHandler : public QWidget
+class ExcelHandler : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit ExcelHandler(QWidget *parent = 0);
-    ~ExcelHandler();
+    explicit ExcelHandler(MainWindow* root, QObject *parent = 0);
+
+signals:
+    void ExcelHandlerSignal();
+    void update(int step);
+
+public slots:
+    void ExcelHandlerSlot(const QStringList&);
 
 private slots:
-    void selectFiles();
-    void importFiles(const QStringList&);
-    void processFile(const QString& filename);
+    void stopWorking() { isWorking = false; }
+
 
 private:
-    Ui::ExcelHandler *ui;
+    void readFromOneExcel(const QString& filePath);
+
+    MainWindow* _root;
+    bool isWorking;
 };
 
 #endif // EXCELHANDLER_H
