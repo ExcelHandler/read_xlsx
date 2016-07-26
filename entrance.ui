@@ -26,6 +26,19 @@
     <string>&lt;h1&gt;人力资源自动化查询系统&lt;/h1&gt;</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>80</y>
+     <width>211</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>导入个人数据</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

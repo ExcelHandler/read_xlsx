@@ -71,6 +71,7 @@
     <property name="title">
      <string>选项</string>
     </property>
+    <addaction name="actionImport"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -83,6 +84,11 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
