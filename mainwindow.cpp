@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ExcelHandler.h"
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QDebug>
 #include <QTreeView>
 #include <QListView>
@@ -8,12 +10,10 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), handler(this), progress(NULL)
+    ui(new Ui::MainWindow), handler(NULL)
 {
     ui->setupUi(this);
     initConnect();
-    handler.moveToThread(&importThread);
-    importThread.start();
 }
 
 MainWindow::~MainWindow()
@@ -23,37 +23,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::initConnect()
 {
-    connect(this, SIGNAL(selectFinished(const QStringList&)), &handler, SLOT(ExcelHandlerSlot(const QStringList&)), Qt::QueuedConnection);
-    connect(&handler, SIGNAL(update(int)), this, SLOT(updateProgressBar(int)));
-    connect(this, SIGNAL(stopExcelHandler()), &handler, SLOT(stopWorking()));
-}
 
-void MainWindow::updateProgressBar(int step)
-{
-    progress -> setValue(step);
-    qDebug() << "Update progress bar " << step;
 }
 
 void MainWindow::on_actionImport_triggered()
 {
-    QFileDialog *fileDialog = new QFileDialog(this);
-    fileDialog -> setWindowTitle(tr("文件位置"));
-    fileDialog -> setDirectory(".");
-    fileDialog -> setNameFilter("*.xls *.xlsx *.csv");
-    fileDialog -> setFileMode(QFileDialog::ExistingFiles);
-
-    if(fileDialog -> exec() == QDialog::Accepted)
-    {
-        QStringList selected = fileDialog -> selectedFiles();
-        emit selectFinished(selected);
-        int sum = selected.length();
-        progress = new QProgressDialog(tr("Importing files..."), tr("Abort Import"),
-                                 0, sum, this);
-        progress -> show();
-
-        for (auto i = selected.begin(); i != selected.end(); ++i)
-            qDebug() << *i << endl;
-    }
-
-
+    handler = new ExcelHandler();
+    handler -> show();
 }

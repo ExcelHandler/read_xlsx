@@ -10,7 +10,7 @@ QT       += axcontainer
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = MDZZ
+TARGET = read_xlsx
 TEMPLATE = app
 
 SOURCES += main.cpp\
@@ -25,4 +25,5 @@ HEADERS  += mainwindow.h \
     ExcelHandler.h
 
 FORMS    += mainwindow.ui \
-    entrance.ui
+    entrance.ui \
+    excelhandler.ui
