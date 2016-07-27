@@ -17,6 +17,7 @@ void ExcelHandler::ExcelHandlerSlot(const QStringList &selected)
     {
 
         qDebug() << selected[i] << endl;
+        readFromOneExcel(selected[i]);
 
         if (!isWorking)
             break;
@@ -27,5 +28,6 @@ void ExcelHandler::ExcelHandlerSlot(const QStringList &selected)
 void ExcelHandler::readFromOneExcel(const QString& filePath)
 {
     ExcelFile file(filePath);
-
+    qDebug() << file.getProperty("A3");
+    file.close();
 }
